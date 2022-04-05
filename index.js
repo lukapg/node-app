@@ -7,12 +7,14 @@ const routes = require("./routes");
 const passport = require("passport");
 const session = require("express-session");
 const flash = require("connect-flash");
+const cors = require("cors");
 
 require("./util/passport")(passport);
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
