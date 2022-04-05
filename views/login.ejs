@@ -1,0 +1,42 @@
+<%- include('./partials/messages') %>
+<div
+  class="font-medium self-center text-xl text-gray-800 uppercase tracking-widest"
+>
+  Project Bruno
+</div>
+<div class="mt-2 self-center text-xl sm:text-sm text-gray-800">
+  Enter your credentials to access your account
+</div>
+
+<div class="mt-6 bg-white">
+  <form action="/login" method="post" class="space-y-4">
+    <div class="flex flex-col">
+      <label for="email" class="text-xs uppercase tracking-wider"
+        >E-mail address:</label
+      >
+      <input
+        type="text"
+        name="email"
+        id="email"
+        class="p-2 rounded border border-gray-100 mt-1"
+      />
+    </div>
+    <div class="flex flex-col">
+      <label for="password" class="text-xs uppercase tracking-wider"
+        >Password:</label
+      >
+      <input
+        type="password"
+        name="password"
+        id="password"
+        class="p-2 rounded border border-gray-100 mt-1"
+      />
+    </div>
+    <button
+      type="submit"
+      class="bg-blue-500 text-white px-6 py-2 font-semibold rounded text-center flex w-full justify-center"
+    >
+      Sign in
+    </button>
+  </form>
+</div>

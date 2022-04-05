@@ -1,0 +1,145 @@
+<div class="p-4">
+  <%- include('./partials/messages') %>
+  <h1 class="font-bold text-lg">WordPress guide</h1>
+  <div class="my-4 p-4 bg-white border border-gray-200 rounded">
+    <div class="flex justify-between items-start">
+      <div class="w-3/4">
+        <h3 class="text-md font-bold">Install the PostWiz plugin</h3>
+        <ol class="list-decimal px-4 mt-4">
+          <li>
+            Manually install the plugin to WordPress site on your website
+            domain.
+          </li>
+          <li>Activate the Plugin.</li>
+          <li>In Plugin Settings, configure the secret key.</li>
+          <li>
+            In Plugin Settings, configure the Unsplash Access Key and Pixabay
+            API key.
+          </li>
+          <li>
+            Before posting with project Bruno, ensure categories and authors are
+            properly set up.
+          </li>
+        </ol>
+      </div>
+      <a
+        href="#"
+        class="bg-blue-500 text-white px-6 py-2 font-semibold rounded w-1/4 text-center"
+        >Download plugin</a
+      >
+    </div>
+  </div>
+  <h1 class="font-bold text-lg">My websites</h1>
+  <% if(typeof domains != 'undefined' && domains.length > 0) { %>
+  <div class="my-4 bg-white border border-gray-200 rounded w-3/4">
+    <div class="p-4">
+      <% domains.forEach(function(domain) { %>
+
+      <div
+        class="bg-gray-50 border border-gray-200 text-gray-700 p-3 text-center rounded mt-4 text-sm first:mt-0 flex items-center justify-between"
+      >
+        <span class="font-semibold"><%= domain.name %></span>
+        <div class="flex items-center justify-between space-x-2">
+          <% if(domain.set_image) { %>
+          <span
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-card-image"
+              viewBox="0 0 16 16"
+            >
+              <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+              <path
+                d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54A.505.505 0 0 1 1 12.5v-9a.5.5 0 0 1 .5-.5h13z"
+              /></svg
+          ></span>
+          <% } %>
+          <a
+            href="#"
+            class="bg-red-500 hover:bg-red-700 text-white p-2 font-semibold rounded text-center delete-domain-btn"
+            data-id="<%= domain.id %>"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-trash-fill"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"
+              /></svg
+          ></a>
+        </div>
+      </div>
+
+      <% }) %>
+    </div>
+  </div>
+  <% } %>
+  <div class="my-4 bg-white border border-gray-200 rounded">
+    <div class="px-4 py-1 border-b border-gray-200">
+      <h3 class="font-bold text-md">Add website</h3>
+    </div>
+    <div class="flex items-center space-x-4">
+      <form
+        action="/domains/create"
+        method="post"
+        class="flex items-end space-x-4 p-4"
+      >
+        <div class="flex items-start space-x-4">
+          <div class="flex flex-col space-y-2">
+            <label for="" class="font-bold text-md">Domain Name</label>
+            <input
+              type="text"
+              name="domain"
+              id="domain"
+              class="rounded p-2 bg-gray-100 border border-gray-200"
+              placeholder="https://example.com"
+              required
+            />
+          </div>
+          <div class="flex flex-col space-y-2">
+            <label for="" class="font-bold text-md">Secret key</label>
+            <input
+              type="text"
+              name="secret_key"
+              id="secret_key"
+              class="rounded p-2 bg-gray-100 border border-gray-200"
+              placeholder="https://example.com"
+              required
+            />
+          </div>
+          <div class="flex flex-col space-y-2">
+            <label for="" class="font-bold text-md">Post images</label>
+            <div class="flex items-center space-x-2">
+              <input type="checkbox" name="set_image" id="set_image" />
+              <span>Autoset image?</span>
+            </div>
+          </div>
+        </div>
+        <button
+          type="submit"
+          class="bg-blue-500 text-white px-6 py-2 font-semibold rounded text-center flex items-center space-x-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-plus-lg"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
+            />
+          </svg>
+          <span>Add new website</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

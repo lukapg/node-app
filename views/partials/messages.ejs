@@ -1,0 +1,25 @@
+<% if(typeof errors != 'undefined') { %> <% errors.forEach(function(error) { %>
+<p
+  class="bg-red-50 border border-red-200 text-red-500 p-2 flex text-center rounded mb-4 text-sm"
+>
+  <%= error.message %>
+</p>
+<% }) %> <% } %> <% if(success_message != '') { %>
+<p
+  class="bg-green-50 border border-green-200 text-green-500 p-2 flex text-center rounded mb-4 text-sm"
+>
+  <%= success_message %>
+</p>
+<% } %> <% if(error_message != '') { %>
+<p
+  class="bg-red-50 border border-red-200 text-red-500 p-2 flex text-center rounded mb-4 text-sm"
+>
+  <%= error_message %>
+</p>
+<% } %> <% if(error != '') { %>
+<p
+  class="bg-red-50 border border-red-200 text-red-500 p-2 flex text-center rounded mb-4 text-sm"
+>
+  <%= error %>
+</p>
+<% } %>

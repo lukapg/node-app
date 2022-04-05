@@ -1,0 +1,101 @@
+<% if(typeof users != 'undefined' && user.is_admin) { %>
+<div class="my-4 bg-white border border-gray-200 rounded w-3/4">
+  <div class="px-4 py-1 border-b border-gray-200">
+    <h3 class="font-bold text-md">Add new user</h3>
+  </div>
+  <div class="p-4">
+    <form action="/create_user" method="post" class="flex items-end space-x-4">
+      <div class="flex flex-col space-y-2 w-full">
+        <label for="" class="font-bold text-md">E-mail address:</label>
+        <input
+          type="text"
+          name="email"
+          id="email"
+          class="rounded p-2 bg-gray-100 border border-gray-200"
+          placeholder="User e-mail..."
+        />
+      </div>
+      <div class="flex flex-col space-y-2 w-full">
+        <label for="" class="font-bold text-md">Password:</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          class="rounded p-2 bg-gray-100 border border-gray-200"
+          placeholder="Password..."
+        />
+      </div>
+      <button
+        type="submit"
+        class="bg-blue-500 text-white px-6 py-2 font-semibold rounded text-center"
+      >
+        <span>Save</span>
+      </button>
+    </form>
+  </div>
+</div>
+<% } %> <% if(typeof users != 'undefined' && user.is_admin && users.length > 0)
+{ %>
+<div class="my-4 bg-white border border-gray-200 rounded w-3/4">
+  <div class="px-4 py-1 border-b border-gray-200">
+    <h3 class="font-bold text-md">Users</h3>
+  </div>
+  <div class="p-4">
+    <% users.forEach(function(single_user) { %>
+
+    <div
+      class="bg-gray-50 border border-gray-200 text-gray-700 p-3 text-center rounded mt-4 text-sm first:mt-0 flex items-center justify-between"
+    >
+      <span class="font-semibold"><%= single_user.email %></span>
+      <div class="flex items-center justify-between space-x-2">
+        <a
+          href="#"
+          class="bg-red-500 hover:bg-red-700 text-white p-2 font-semibold rounded text-center delete-user-btn"
+          data-id="<%= single_user.id %>"
+          ><svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-trash-fill"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"
+            /></svg
+        ></a>
+        <form action="/force_login" method="post">
+          <input
+            type="hidden"
+            name="email"
+            id="email"
+            value="<%= single_user.email %>"
+          />
+          <button
+            type="submit"
+            class="bg-blue-500 hover:bg-blue-700 text-white p-2 font-semibold rounded text-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-person-bounding-box"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5z"
+              />
+              <path
+                d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"
+              />
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <% }) %>
+  </div>
+</div>
+<% } %>
