@@ -23,6 +23,7 @@
     "express": "^4.17.3",
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.17.2",
+    "node-fetch": "^3.2.3",
     "node-pg-migrate": "^6.2.1",
     "nodemon": "^2.0.15",
     "passport": "^0.5.2",

@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const validUrl = require("valid-url");
 const http = require("http");
 var os = require("os");
+const fetch = require("node-fetch");
 
 router.get("/login", loginPage, (req, res) => {
   res.render("login", { title: "Login", layout: "./layouts/login" });
