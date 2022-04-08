@@ -11,6 +11,22 @@ exports.up = (pgm) => {
     password: { type: "varchar(255)", notNull: true },
     is_admin: { type: "boolean", notNull: true },
     active: { type: "boolean", notNull: true },
+    request_url: { type: "varchar(255)" },
+    api_key: {
+      type: "varchar(255)",
+      notNull: true,
+      default: "JTdCJTIya2luZCUyMiUzQSUyMmRvY3VtZW50JTIyJTJD",
+    },
+    minimum_word_length: {
+      type: "integer",
+      notNull: true,
+      default: 300,
+    },
+    minimum_seo_score: {
+      type: "integer",
+      notNull: true,
+      default: 75,
+    },
     created_at: {
       type: "timestamp",
       notNull: true,
@@ -55,6 +71,11 @@ exports.up = (pgm) => {
     name: { type: "varchar(255)", notNull: true },
     category: { type: "varchar(255)", notNull: true },
     author: { type: "varchar(255)", notNull: true },
+    created_at: {
+      type: "timestamp",
+      notNull: true,
+      default: pgm.func("current_timestamp"),
+    },
   });
   pgm.createTable("keywords", {
     id: {
@@ -74,8 +95,39 @@ exports.up = (pgm) => {
       references: '"jobs"',
       onDelete: "cascade",
     },
+    domain_id: {
+      type: "integer",
+      notNull: true,
+      references: '"domains"',
+      onDelete: "cascade",
+    },
     name: { type: "varchar(255)", notNull: true },
     status: { type: "boolean", notNull: true },
+    callback_result: { type: "varchar(255)" },
+  });
+  pgm.createTable("blacklist", {
+    id: {
+      type: "serial",
+      notNull: true,
+      primaryKey: true,
+    },
+    user_id: {
+      type: "integer",
+      notNull: true,
+      references: '"users"',
+      onDelete: "cascade",
+    },
+    word: { type: "varchar(255)", notNull: true },
+  });
+  pgm.createTable("callback_logs", {
+    id: {
+      type: "serial",
+      notNull: true,
+      primaryKey: true,
+    },
+    job_id: { type: "varchar(255)", notNull: true },
+    keyword: { type: "varchar(255)", notNull: true },
+    status: { type: "varchar(255)", notNull: true },
   });
 
   pgm.sql(`INSERT INTO users (email, password, is_admin, active) VALUES

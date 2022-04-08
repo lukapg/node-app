@@ -1,0 +1,78 @@
+<div class="flex items-stretch space-x-4">
+  <div class="mb-2 bg-white border border-gray-200 rounded w-1/3">
+    <div class="px-4 py-1 border-b border-gray-200">
+      <h3 class="font-bold text-md">Blacklisted word list</h3>
+    </div>
+    <div class="p-4">
+      <form
+        action="/update_blacklist"
+        method="post"
+        class="flex flex-col items-end space-y-4"
+      >
+        <div class="flex flex-col space-y-2 w-full">
+          <label for="" class="font-bold text-md">List of banned words</label>
+          <textarea
+            type="text"
+            name="blacklist"
+            id="blacklist"
+            class="rounded p-2 bg-gray-100 border border-gray-200"
+            rows="5"
+          >
+<%= words %></textarea
+          >
+        </div>
+        <button
+          type="submit"
+          class="bg-blue-500 text-white px-6 py-2 font-semibold rounded text-center"
+        >
+          <span>Save</span>
+        </button>
+      </form>
+    </div>
+  </div>
+  <div class="mb-2 bg-white border border-gray-200 rounded w-1/3">
+    <div class="px-4 py-1 border-b border-gray-200">
+      <h3 class="font-bold text-md">Parameters</h3>
+    </div>
+    <div class="p-4">
+      <form
+        action="/update_parameters"
+        method="post"
+        class="flex flex-col items-end space-y-4"
+      >
+        <div class="flex flex-col space-y-2 w-full">
+          <label for="" class="font-bold text-md"
+            >Article Minimum Word Length</label
+          >
+          <input
+            type="text"
+            name="minimum_word_length"
+            id="minimum_word_length"
+            class="rounded p-2 bg-gray-100 border border-gray-200"
+            placeholder="300"
+            value="<%= user.minimum_word_length %>"
+          />
+        </div>
+        <div class="flex flex-col space-y-2 w-full">
+          <label for="" class="font-bold text-md"
+            >Article Minimum SEO Score (0-100)</label
+          >
+          <input
+            type="text"
+            name="minimum_seo_score"
+            id="minimum_seo_score"
+            class="rounded p-2 bg-gray-100 border border-gray-200"
+            placeholder="75"
+            value="<%= user.minimum_seo_score %>"
+          />
+        </div>
+        <button
+          type="submit"
+          class="bg-blue-500 text-white px-6 py-2 font-semibold rounded text-center"
+        >
+          <span>Save</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,101 @@
+<div class="p-4 w-3/4">
+  <%- include('./partials/messages') %>
+  <div class="flex items-center justify-between">
+    <h1 class="font-bold text-lg">Create new job</h1>
+    <a
+      href="/history"
+      class="bg-blue-500 text-white px-6 py-2 font-semibold rounded text-center flex items-center space-x-2"
+    >
+      <span>View all jobs</span>
+    </a>
+  </div>
+  <div class="my-4 bg-white border border-gray-200 rounded">
+    <div class="px-4 py-1 border-b border-gray-200">
+      <h3 class="font-bold text-md">Create new job for Bruno</h3>
+    </div>
+    <div class="p-4">
+      <form action="/post-job" method="post" class="flex flex-col space-y-4">
+        <div class="flex items-center space-x-4">
+          <div class="flex flex-col space-y-2">
+            <label for="" class="font-bold text-md">Job Name</label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              class="rounded p-2 bg-gray-100 border border-gray-200"
+              placeholder="Job name..."
+              required
+            />
+          </div>
+          <div class="flex flex-col space-y-2">
+            <label for="" class="font-bold text-md">Post to Category</label>
+            <input
+              type="text"
+              name="category"
+              id="category"
+              class="rounded p-2 bg-gray-100 border border-gray-200"
+              placeholder="Category..."
+            />
+          </div>
+          <div class="flex flex-col space-y-2">
+            <label for="" class="font-bold text-md">Where to Post?</label>
+            <select
+              name="domain"
+              id="domain"
+              class="rounded p-2 bg-gray-100 border border-gray-200"
+              required
+            >
+              <option value="">Select a domain...</option>
+              <% domains.forEach(function(domain) { %>
+              <option value="<%= domain.id %>"><%= domain.name %></option>
+              <% }) %>
+            </select>
+          </div>
+        </div>
+        <div class="flex flex-col space-y-2">
+          <label for="" class="font-bold text-md">Keywords</label>
+          <textarea
+            type="text"
+            name="keywords"
+            id="keywords"
+            class="rounded p-2 bg-gray-100 border border-gray-200 w-1/2"
+            placeholder="Enter keywords, one per line"
+            rows="4"
+            required
+          ></textarea>
+        </div>
+        <div class="flex items-end justify-between">
+          <div class="flex flex-col space-y-2">
+            <label for="" class="font-bold text-md">Article author</label>
+            <input
+              type="text"
+              name="author"
+              id="author"
+              class="rounded p-2 bg-gray-100 border border-gray-200"
+              placeholder="Author..."
+            />
+          </div>
+          <button
+            type="submit"
+            class="bg-blue-500 text-white px-6 py-2 font-semibold rounded text-center flex items-center space-x-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-plus-lg"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
+              />
+            </svg>
+            <span>Start job</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

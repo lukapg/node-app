@@ -1,0 +1,41 @@
+<div class="my-4 bg-white border border-gray-200 rounded w-3/4">
+  <div class="px-4 py-1 border-b border-gray-200">
+    <h3 class="font-bold text-md">Article Composer API</h3>
+  </div>
+  <div class="p-4">
+    <form
+      action="/update_composer_api"
+      method="post"
+      class="flex items-end space-x-4"
+    >
+      <div class="flex flex-col space-y-2 w-full">
+        <label for="" class="font-bold text-md">Request URL</label>
+        <input
+          type="text"
+          name="request_url"
+          id="request_url"
+          class="rounded p-2 bg-gray-100 border border-gray-200"
+          placeholder="https://example.com"
+          value="<%= user.request_url %>"
+        />
+      </div>
+      <div class="flex flex-col space-y-2 w-full">
+        <label for="" class="font-bold text-md">API Key</label>
+        <input
+          type="text"
+          name="api_key"
+          id="api_key"
+          class="rounded p-2 bg-gray-100 border border-gray-200"
+          placeholder="JTdCJTIya2luZCUyMiUzQSUy"
+          value="<%= user.api_key %>"
+        />
+      </div>
+      <button
+        type="submit"
+        class="bg-blue-500 text-white px-6 py-2 font-semibold rounded text-center"
+      >
+        <span>Save</span>
+      </button>
+    </form>
+  </div>
+</div>

@@ -1,4 +1,81 @@
 <div class="p-4">
-  <%- include('./partials/messages') %>
-  <h1 class="font-bold text-lg">Home</h1>
+  <h1 class="font-bold text-lg">Statistics</h1>
+  <div class="flex items-center space-x-4 mt-4" id="statistics">
+    <div class="flex flex-col w-1/4 space-y-2">
+      <div
+        class="bg-white p-2 border-gray-200 border rounded flex flex-col space-y-2"
+      >
+        <span class="font-semibold text-sm">Currently processing job</span>
+        <span class="text-xl text-gray-600 font-thin" id="job_name">none</span>
+      </div>
+      <div
+        class="bg-white p-2 border-gray-200 border rounded flex flex-col space-y-2"
+      >
+        <span class="font-semibold text-sm">Currently processing keyword</span>
+        <span class="text-xl text-gray-600 font-thin" id="keyword_name"
+          >none</span
+        >
+      </div>
+    </div>
+    <div class="flex flex-col w-1/5 space-y-2">
+      <div
+        class="bg-white p-2 border-gray-200 border rounded flex flex-col space-y-2"
+      >
+        <span class="font-semibold text-sm">Keywords pending</span>
+        <span
+          class="text-xl font-semibold text-yellow-700"
+          id="keywords_pending"
+        ></span>
+      </div>
+      <div
+        class="bg-white p-2 border-gray-200 border rounded flex flex-col space-y-2"
+      >
+        <span class="font-semibold text-sm">Jobs pending</span>
+        <span
+          class="text-xl font-semibold text-yellow-700"
+          id="jobs_pending"
+        ></span>
+      </div>
+    </div>
+    <div class="flex flex-col w-1/5 space-y-2">
+      <div
+        class="bg-white p-2 border-gray-200 border rounded flex flex-col space-y-2"
+      >
+        <span class="font-semibold text-sm">Keywords ready</span>
+        <span
+          class="text-xl font-semibold text-green-500"
+          id="keywords_ready"
+        ></span>
+      </div>
+      <div
+        class="bg-white p-2 border-gray-200 border rounded flex flex-col space-y-2"
+      >
+        <span class="font-semibold text-sm">Jobs ready</span>
+        <span
+          class="text-xl font-semibold text-green-500"
+          id="jobs_ready"
+        ></span>
+      </div>
+    </div>
+    <div class="flex flex-col w-1/5 space-y-2">
+      <div
+        class="bg-white p-2 border-gray-200 border rounded flex flex-col space-y-2"
+      >
+        <span class="font-semibold text-sm">All time articles</span>
+        <span
+          class="text-xl font-semibold text-blue-500"
+          id="all_time_keywords"
+        ></span>
+      </div>
+      <div
+        class="bg-white p-2 border-gray-200 border rounded flex flex-col space-y-2"
+      >
+        <span class="font-semibold text-sm">All time jobs</span>
+        <span
+          class="text-xl font-semibold text-blue-500"
+          id="all_time_jobs"
+        ></span>
+      </div>
+    </div>
+  </div>
 </div>

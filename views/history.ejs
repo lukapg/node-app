@@ -1,3 +1,133 @@
 <div class="p-4">
-  <h1 class="font-bold text-lg">Job history</h1>
+  <%- include('./partials/messages') %>
+  <div class="flex items-center justify-between">
+    <h1 class="font-bold text-lg">All jobs</h1>
+    <div class="flex items-center justify-between space-x-4">
+      <select
+        name="domain_select"
+        id="domain_select"
+        class="rounded p-2 bg-white border border-gray-200 pr-24"
+      >
+        <option value="">All domains</option>
+        <% domains.forEach(function(domain) { %>
+        <option value="<%= domain.id %>"><%= domain.name %></option>
+        <% }) %>
+      </select>
+      <a
+        href="/create-job"
+        class="bg-blue-500 text-white px-6 py-2 font-semibold rounded text-center flex items-center space-x-2"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-plus-lg"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
+          />
+        </svg>
+        <span>Add new job</span>
+      </a>
+    </div>
+  </div>
+  <% if(typeof domains != 'undefined' && domains.length > 0) { %> <%
+  domains.forEach(function(domain) { %> <% if (domain.total > 0) { %>
+  <div
+    class="my-4 bg-white border border-gray-200 rounded domain"
+    id="domain-<%= domain.id %>"
+  >
+    <div
+      class="px-4 py-1 border-b border-gray-200 flex items-center justify-between"
+    >
+      <h3 class="font-bold text-md"><%= domain.name %></h3>
+      <div class="flex items-center space-x-4">
+        <span>All time articles</span>
+        <span class="text-blue-500 font-semibold"><%= domain.total %></span>
+      </div>
+    </div>
+    <div class="p-4">
+      <table class="w-full text-center">
+        <thead>
+          <tr>
+            <th class="font-bold text-md">Job Name</th>
+            <th class="font-bold text-md">Date Time</th>
+            <th class="font-bold text-md">Category</th>
+            <th class="font-bold text-md">Author</th>
+            <th class="font-bold text-md">Status</th>
+            <th class="font-bold text-md">Logs</th>
+            <th class="font-bold text-md">Keywords</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% jobs.filter(job => job.domain_id == domain.id).forEach(job => { %>
+
+          <tr class="border border-gray-100">
+            <td class="p-2"><%= job.name %></td>
+            <td class="p-2"><%= job.created_at %></td>
+            <td class="p-2"><%= job.category %></td>
+            <td class="p-2"><%= job.author %></td>
+            <td class="p-2 font-bold">
+              <span class="text-blue-500"><%= job.completed %></span> / <%=
+              job.total %>
+            </td>
+            <td class="p-2">
+              <a
+                href="/download-logs/<%= job.hash_id %>"
+                class="flex justify-center"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-download"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"
+                  />
+                  <path
+                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"
+                  /></svg
+              ></a>
+            </td>
+            <td class="p-2">
+              <a
+                href="/download-keywords/<%= job.id %>"
+                class="flex justify-center"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-download"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"
+                  />
+                  <path
+                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"
+                  /></svg
+              ></a>
+            </td>
+          </tr>
+          <tr class="spacer">
+            <td></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <% } %> <% }) %> <% } else {%>
+  <div
+    class="rounded p-2 bg-white border border-gray-200 mt-4 font-semibold text-center"
+  >
+    No domains found
+  </div>
+  <% } %>
 </div>

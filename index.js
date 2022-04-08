@@ -1,5 +1,4 @@
 const express = require("express");
-const helmet = require("helmet");
 const compression = require("compression");
 const expressLayouts = require("express-ejs-layouts");
 const dotenv = require("dotenv");
@@ -25,7 +24,6 @@ app.use(express.static("public"));
 app.use(expressLayouts);
 app.set("layout", "./layouts/main");
 app.set("view engine", "ejs");
-app.use(helmet());
 app.use(compression());
 
 app.use(
