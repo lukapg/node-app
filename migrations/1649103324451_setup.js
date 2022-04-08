@@ -14,8 +14,6 @@ exports.up = (pgm) => {
     request_url: { type: "varchar(255)" },
     api_key: {
       type: "varchar(255)",
-      notNull: true,
-      default: "JTdCJTIya2luZCUyMiUzQSUyMmRvY3VtZW50JTIyJTJD",
     },
     minimum_word_length: {
       type: "integer",
@@ -46,7 +44,11 @@ exports.up = (pgm) => {
       onDelete: "cascade",
     },
     name: { type: "varchar(255)", notNull: true },
-    secret_key: { type: "varchar(255)", notNull: true },
+    secret_key: {
+      type: "varchar(255)",
+      notNull: true,
+      default: "JTdCJTIya2luZCUyMiUzQSUyMmRvY3VtZW50JTIyJTJD",
+    },
     set_image: { type: "boolean", notNull: true },
   });
   pgm.createTable("jobs", {
