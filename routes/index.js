@@ -440,14 +440,15 @@ router.get("/download-keywords/:jobId", authenticated, async (req, res) => {
   res.send(text);
 });
 
-router.get("/download-logs/:jobId", authenticated, async (req, res) => {
-  const jobId = req.params.jobId;
+router.get("/download-logs/:hashId", authenticated, async (req, res) => {
+  const hashId = req.params.hashId;
+  const job = await db.query("select * from jobs where hash_id = $1", [hashId]);
   let logs = await db.query("select * from callback_logs where job_id = $1", [
-    jobId,
+    job.rows[0].id,
   ]);
   let text = "";
   logs.rows.forEach((log, index, array) => {
-    if (array[array.length - 1] === word) {
+    if (array[array.length - 1] === log) {
       text = text.concat(log.keyword + " - " + log.status);
     } else {
       text = text.concat(log.keyword + " - " + log.status + "\n");
