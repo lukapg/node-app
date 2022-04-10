@@ -416,6 +416,7 @@ router.post("/post-job", authenticated, async (req, res, next) => {
     return res.redirect("/history");
   } catch (error) {
     req.flash("error_message", error.message);
+    console.log(error);
     return next();
   }
 });
