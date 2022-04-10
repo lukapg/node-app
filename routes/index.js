@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 const validUrl = require("valid-url");
 const http = require("http");
 var os = require("os");
-const fetch = require("node-fetch");
+const axios = require("axios");
 
 router.get("/login", loginPage, (req, res) => {
   res.render("login", { title: "Login", layout: "./layouts/login" });
@@ -32,7 +32,7 @@ router.get("/statistics", authenticated, async (req, res) => {
       [req.user.id]
     );
     const keywords = await db.query(
-      "select (select count(*) from keywords where callback_result = 'success') as all_time_keywords, (select count(*) from keywords where callback_result = 'success' and job_id = (select id from jobs where exists (select * from keywords where status = false) order by id asc limit 1)) as keywords_ready, (select name from keywords where status = false order by id asc limit 1) as keyword_name, count(*) filter (where keywords.status = false) as keywords_pending from keywords where user_id = $1",
+      "select (select count(*) from keywords where callback_result = 'success') as all_time_keywords, (select count(*) from keywords where status = true and callback_result = 'success' and job_id = (select id from jobs where exists (select * from keywords where status = false) order by id asc limit 1)) as keywords_ready, (select name from keywords where status = false order by id asc limit 1) as keyword_name, count(*) filter (where keywords.status = false) as keywords_pending from keywords where user_id = $1",
       [req.user.id]
     );
     let returnData = {
@@ -396,23 +396,11 @@ router.post("/post-job", authenticated, async (req, res, next) => {
       "minimum ink score": req.user.minimum_seo_score,
       "blacklisted words": blacklistWords,
       keywords: keywordsWords,
-      "callback url": os.hostname() + "/callback",
+      "callback url": req.protocol + "://" + req.hostname + "/callback",
       "job id": hashId,
     };
 
-    const brunoApiResponse = await fetch(req.user.request_url, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(apiBody),
-    });
-
-    if (!brunoApiResponse.ok) {
-      req.flash("error_message", "Could not post Job");
-      return res.redirect("/create-job");
-    }
+    //const brunoApiResponse = await axios.post(req.user.request_url, apiBody);
 
     const jobCreated = await db.query(
       "insert into jobs (hash_id, user_id, domain_id, name, category, author) values ($1, $2, $3, $4, $5, $6) returning *",
@@ -420,13 +408,13 @@ router.post("/post-job", authenticated, async (req, res, next) => {
     );
 
     keywordsArray.forEach(async (el, i, arr) => {
-      arr[i] = el.replace(/[^a-zA-Z0-9-_]/g, "");
+      arr[i] = el.replace(/[^a-zA-Z0-9-_ ]/g, "");
       await db.query(
         "insert into keywords (user_id, job_id, domain_id, name, status) values ($1, $2, $3, $4, $5)",
         [req.user.id, jobCreated.rows[0].id, domain, arr[i], 0]
       );
     });
-    req.flash("success_message", "Job created successfully.");
+    req.flash("success_message", JSON.stringify(apiBody));
     return res.redirect("/history");
   } catch (error) {
     req.flash("error_message", error.message);
@@ -483,13 +471,13 @@ router.post("/callback", authenticated, async (req, res) => {
       });
     }
 
-    const job = await db.query("select * from job where hash_id = $1", [
+    const job = await db.query("select * from jobs where hash_id = $1", [
       job_id,
     ]);
 
     const updateResult = await db.query(
-      "update keywords set status = true where job_id = $1 and name = $2",
-      [job.rows[0].id, keyword]
+      "update keywords set status = true, callback_result = $1 where job_id = $2 and name = $3",
+      [status, job.rows[0].id, keyword]
     );
 
     const insertLog = await db.query(
