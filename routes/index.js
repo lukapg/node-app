@@ -5,8 +5,6 @@ const { authenticated, loginPage } = require("../middleware/authenticated");
 const { checkUrlExists } = require("../util/functions");
 const bcrypt = require("bcrypt");
 const validUrl = require("valid-url");
-const http = require("http");
-var os = require("os");
 const axios = require("axios");
 
 router.get("/login", loginPage, (req, res) => {
