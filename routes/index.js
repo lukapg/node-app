@@ -459,7 +459,7 @@ router.get("/download-logs/:hashId", authenticated, async (req, res) => {
   res.send(text);
 });
 
-router.post("/callback", authenticated, async (req, res) => {
+router.post("/callback", async (req, res) => {
   try {
     const { keyword, status } = req.body;
     const job_id = req.body["job id"];
