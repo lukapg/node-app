@@ -112,18 +112,32 @@ router.post("/create_user", authenticated, async (req, res, next) => {
   try {
     if (!req.user.is_admin) return next();
     const { email, password } = req.body;
+    // Check if an active user with this e-mail address already exists; if it does return
     const hashedPassword = await bcrypt.hash(password, 10);
-    const userExists = await db.query("select * from users where email = $1", [
-      email,
-    ]);
+    const userExists = await db.query(
+      "select * from users where email = $1 and active = $2",
+      [email, true]
+    );
     if (userExists.rows.length > 0) {
       req.flash("error_message", "User already exists.");
       return res.redirect("/settings");
     }
-    const newUser = await db.query(
-      "INSERT INTO users(email, password, is_admin, active) values ($1, $2, $3, $4) returning *",
-      [email, hashedPassword, false, true]
+    // Check if a user who is deactivated already exists, if it does, just update the active field, else create a new one
+    const deactivatedUserExists = await db.query(
+      "select * from users where email = $1 and active = $2",
+      [email, false]
     );
+    if (deactivatedUserExists.rows.length > 0) {
+      await db.query(
+        "update users set active = $1, password = $2 where email = $3",
+        [true, hashedPassword, email]
+      );
+    } else {
+      await db.query(
+        "INSERT INTO users(email, password, is_admin, active) values ($1, $2, $3, $4) returning *",
+        [email, hashedPassword, false, true]
+      );
+    }
     req.flash("success_message", "User was added successfully.");
     res.redirect("/settings");
   } catch (error) {
