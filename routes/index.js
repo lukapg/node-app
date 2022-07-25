@@ -353,87 +353,86 @@ router.get("/create-job", authenticated, async (req, res) => {
 });
 
 router.post("/post_job", authenticated, async (req, res, next) => {
-  res.send("Test");
-  // try {
-  //   const { name, category, domain, author, keywords } = req.body;
-  //   if (!name || !domain || !keywords) {
-  //     req.flash("error_message", "Please fill all required fields");
-  //     return res.redirect("/create-job");
-  //   }
+  try {
+    const { name, category, domain, author, keywords } = req.body;
+    if (!name || !domain || !keywords) {
+      req.flash("error_message", "Please fill all required fields");
+      return res.redirect("/create-job");
+    }
 
-  //   let blacklistWords = [];
-  //   let keywordsArray = [];
-  //   keywordsArray = keywords.split("\n");
+    let blacklistWords = [];
+    let keywordsArray = [];
+    keywordsArray = keywords.split("\n");
 
-  //   keywordsArray.forEach((el, i, arr) => {
-  //     arr[i] = el.replace(/[^a-zA-Z0-9-_ ]/g, "");
-  //   });
+    keywordsArray.forEach((el, i, arr) => {
+      arr[i] = el.replace(/[^a-zA-Z0-9-_ ]/g, "");
+    });
 
-  //   const domainDetails = await db.query(
-  //     "select * from domains where id = $1",
-  //     [domain]
-  //   );
+    const domainDetails = await db.query(
+      "select * from domains where id = $1",
+      [domain]
+    );
 
-  //   const domainName = domainDetails.rows[0].name;
-  //   const domainSecretKey = domainDetails.rows[0].secret_key;
-  //   const domainFeaturedImage = domainDetails.rows[0].set_image;
+    const domainName = domainDetails.rows[0].name;
+    const domainSecretKey = domainDetails.rows[0].secret_key;
+    const domainFeaturedImage = domainDetails.rows[0].set_image;
 
-  //   let pluginUrl = String(domainName).endsWith("/")
-  //     ? "wp-json/post-wiz/v1/publish-post"
-  //     : "/wp-json/post-wiz/v1/publish-post";
-  //   let domainPluginUrl = domainName + pluginUrl;
+    let pluginUrl = String(domainName).endsWith("/")
+      ? "wp-json/post-wiz/v1/publish-post"
+      : "/wp-json/post-wiz/v1/publish-post";
+    let domainPluginUrl = domainName + pluginUrl;
 
-  //   let blacklist = await db.query(
-  //     "select * from blacklist where user_id = $1",
-  //     [req.user.id]
-  //   );
-  //   blacklist.rows.forEach((el) => {
-  //     blacklistWords.push(el.word);
-  //   });
+    let blacklist = await db.query(
+      "select * from blacklist where user_id = $1",
+      [req.user.id]
+    );
+    blacklist.rows.forEach((el) => {
+      blacklistWords.push(el.word);
+    });
 
-  //   blacklistWords = blacklistWords.join(", ");
-  //   let keywordsWords = keywordsArray.join(", ");
+    blacklistWords = blacklistWords.join(", ");
+    let keywordsWords = keywordsArray.join(", ");
 
-  //   const hashId = Array.from(Array(16), () =>
-  //     Math.floor(Math.random() * 36).toString(36)
-  //   ).join("");
+    const hashId = Array.from(Array(16), () =>
+      Math.floor(Math.random() * 36).toString(36)
+    ).join("");
 
-  //   const apiBody = {
-  //     "api key": req.user.api_key,
-  //     "wordpress url": domainPluginUrl,
-  //     "secret key": domainSecretKey,
-  //     "add featured image": domainFeaturedImage,
-  //     category: category,
-  //     author: author,
-  //     "minimum word count": req.user.minimum_word_length,
-  //     "minimum ink score": req.user.minimum_seo_score,
-  //     "blacklisted words": blacklistWords,
-  //     keywords: keywordsWords,
-  //     "callback url": req.protocol + "://" + req.hostname + "/callback",
-  //     "job id": hashId,
-  //   };
+    const apiBody = {
+      "api key": req.user.api_key,
+      "wordpress url": domainPluginUrl,
+      "secret key": domainSecretKey,
+      "add featured image": domainFeaturedImage,
+      category: category,
+      author: author,
+      "minimum word count": req.user.minimum_word_length,
+      "minimum ink score": req.user.minimum_seo_score,
+      "blacklisted words": blacklistWords,
+      keywords: keywordsWords,
+      "callback url": req.protocol + "://" + req.hostname + "/callback",
+      "job id": hashId,
+    };
 
-  //   const brunoApiResponse = await axios.post(req.user.request_url, apiBody);
+    const brunoApiResponse = await axios.post(req.user.request_url, apiBody);
 
-  //   const jobCreated = await db.query(
-  //     "insert into jobs (hash_id, user_id, domain_id, name, category, author) values ($1, $2, $3, $4, $5, $6) returning *",
-  //     [hashId, req.user.id, domain, name, category, author]
-  //   );
+    const jobCreated = await db.query(
+      "insert into jobs (hash_id, user_id, domain_id, name, category, author) values ($1, $2, $3, $4, $5, $6) returning *",
+      [hashId, req.user.id, domain, name, category, author]
+    );
 
-  //   keywordsArray.forEach(async (el, i, arr) => {
-  //     arr[i] = el.replace(/[^a-zA-Z0-9-_ ]/g, "");
-  //     await db.query(
-  //       "insert into keywords (user_id, job_id, domain_id, name, status) values ($1, $2, $3, $4, $5)",
-  //       [req.user.id, jobCreated.rows[0].id, domain, arr[i], 0]
-  //     );
-  //   });
-  //   req.flash("success_message", JSON.stringify(apiBody));
-  //   return res.redirect("/history");
-  // } catch (error) {
-  //   req.flash("error_message", error.message);
-  //   console.log(error);
-  //   return next();
-  // }
+    keywordsArray.forEach(async (el, i, arr) => {
+      arr[i] = el.replace(/[^a-zA-Z0-9-_ ]/g, "");
+      await db.query(
+        "insert into keywords (user_id, job_id, domain_id, name, status) values ($1, $2, $3, $4, $5)",
+        [req.user.id, jobCreated.rows[0].id, domain, arr[i], 0]
+      );
+    });
+    req.flash("success_message", JSON.stringify(apiBody));
+    return res.redirect("/history");
+  } catch (error) {
+    req.flash("error_message", error.message);
+    console.log(error);
+    return next();
+  }
 });
 
 router.get("/download-keywords/:jobId", authenticated, async (req, res) => {
