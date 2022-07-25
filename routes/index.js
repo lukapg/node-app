@@ -412,7 +412,7 @@ router.post("/post_job", authenticated, async (req, res, next) => {
       "job id": hashId,
     };
 
-    const brunoApiResponse = await axios.post(req.user.request_url, apiBody);
+    //const brunoApiResponse = await axios.post(req.user.request_url, apiBody);
 
     const jobCreated = await db.query(
       "insert into jobs (hash_id, user_id, domain_id, name, category, author) values ($1, $2, $3, $4, $5, $6) returning *",
@@ -426,7 +426,7 @@ router.post("/post_job", authenticated, async (req, res, next) => {
         [req.user.id, jobCreated.rows[0].id, domain, arr[i], 0]
       );
     });
-    req.flash("success_message", JSON.stringify(apiBody));
+    req.flash("success_message", "Job created successfully");
     return res.redirect("/history");
   } catch (error) {
     req.flash("error_message", error.message);
