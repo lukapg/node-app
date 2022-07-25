@@ -352,6 +352,82 @@ router.get("/create-job", authenticated, async (req, res) => {
   });
 });
 
+router.get("/download-keywords/:jobId", authenticated, async (req, res) => {
+  const jobId = req.params.jobId;
+  let keywords = await db.query(
+    "select keywords.name from keywords where job_id = $1",
+    [jobId]
+  );
+  let text = "";
+  keywords.rows.forEach((word, index, array) => {
+    if (array[array.length - 1] === word) {
+      text = text.concat(word.name);
+    } else {
+      text = text.concat(word.name + "\n");
+    }
+  });
+  res.setHeader("Content-type", "application/octet-stream");
+  res.setHeader("Content-disposition", "attachment; filename=keywords.txt");
+  res.send(text);
+});
+
+router.get("/download-logs/:hashId", authenticated, async (req, res) => {
+  const hashId = req.params.hashId;
+  const job = await db.query("select * from jobs where hash_id = $1", [hashId]);
+  let logs = await db.query("select * from callback_logs where job_id = $1", [
+    job.rows[0].id,
+  ]);
+  let text = "";
+  logs.rows.forEach((log, index, array) => {
+    if (array[array.length - 1] === log) {
+      text = text.concat(log.keyword + " - " + log.status);
+    } else {
+      text = text.concat(log.keyword + " - " + log.status + "\n");
+    }
+  });
+  res.setHeader("Content-type", "application/octet-stream");
+  res.setHeader("Content-disposition", "attachment; filename=logs.txt");
+  res.send(text);
+});
+
+router.post("/callback", async (req, res) => {
+  try {
+    const { keyword, status } = req.body;
+    const job_id = req.body["job id"];
+
+    if (!keyword || !status || !job_id) {
+      return res.status(400).json({
+        error:
+          "You have to specify all required parameters for the callback URL",
+      });
+    }
+
+    const job = await db.query("select * from jobs where hash_id = $1", [
+      job_id,
+    ]);
+
+    const updateResult = await db.query(
+      "update keywords set status = true, callback_result = $1 where job_id = $2 and name = $3",
+      [status, job.rows[0].id, keyword]
+    );
+
+    const insertLog = await db.query(
+      "insert into callback_logs(job_id, keyword, status) values($1, $2, $3)",
+      [job.rows[0].id, keyword, status]
+    );
+
+    return res.status(200).json({ data: "Callback success" });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+router.get("/logout", authenticated, (req, res) => {
+  req.logout();
+  req.flash("success_message", "You have been logged out.");
+  res.redirect("/login");
+});
+
 router.post("/post-job", authenticated, async (req, res, next) => {
   res.send("Test");
   // try {
@@ -434,82 +510,6 @@ router.post("/post-job", authenticated, async (req, res, next) => {
   //   console.log(error);
   //   return next();
   // }
-});
-
-router.get("/download-keywords/:jobId", authenticated, async (req, res) => {
-  const jobId = req.params.jobId;
-  let keywords = await db.query(
-    "select keywords.name from keywords where job_id = $1",
-    [jobId]
-  );
-  let text = "";
-  keywords.rows.forEach((word, index, array) => {
-    if (array[array.length - 1] === word) {
-      text = text.concat(word.name);
-    } else {
-      text = text.concat(word.name + "\n");
-    }
-  });
-  res.setHeader("Content-type", "application/octet-stream");
-  res.setHeader("Content-disposition", "attachment; filename=keywords.txt");
-  res.send(text);
-});
-
-router.get("/download-logs/:hashId", authenticated, async (req, res) => {
-  const hashId = req.params.hashId;
-  const job = await db.query("select * from jobs where hash_id = $1", [hashId]);
-  let logs = await db.query("select * from callback_logs where job_id = $1", [
-    job.rows[0].id,
-  ]);
-  let text = "";
-  logs.rows.forEach((log, index, array) => {
-    if (array[array.length - 1] === log) {
-      text = text.concat(log.keyword + " - " + log.status);
-    } else {
-      text = text.concat(log.keyword + " - " + log.status + "\n");
-    }
-  });
-  res.setHeader("Content-type", "application/octet-stream");
-  res.setHeader("Content-disposition", "attachment; filename=logs.txt");
-  res.send(text);
-});
-
-router.post("/callback", async (req, res) => {
-  try {
-    const { keyword, status } = req.body;
-    const job_id = req.body["job id"];
-
-    if (!keyword || !status || !job_id) {
-      return res.status(400).json({
-        error:
-          "You have to specify all required parameters for the callback URL",
-      });
-    }
-
-    const job = await db.query("select * from jobs where hash_id = $1", [
-      job_id,
-    ]);
-
-    const updateResult = await db.query(
-      "update keywords set status = true, callback_result = $1 where job_id = $2 and name = $3",
-      [status, job.rows[0].id, keyword]
-    );
-
-    const insertLog = await db.query(
-      "insert into callback_logs(job_id, keyword, status) values($1, $2, $3)",
-      [job.rows[0].id, keyword, status]
-    );
-
-    return res.status(200).json({ data: "Callback success" });
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-});
-
-router.get("/logout", authenticated, (req, res) => {
-  req.logout();
-  req.flash("success_message", "You have been logged out.");
-  res.redirect("/login");
 });
 
 module.exports = router;
