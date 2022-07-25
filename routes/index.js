@@ -412,9 +412,8 @@ router.post("/post_job", authenticated, async (req, res, next) => {
       "job id": hashId,
     };
 
-    res.send(req.user);
-
-    // const brunoApiResponse = await axios.post(req.user.request_url, apiBody);
+    const brunoApiResponse = await axios.post(req.user.request_url, apiBody);
+    res.send(brunoApiResponse);
 
     // const jobCreated = await db.query(
     //   "insert into jobs (hash_id, user_id, domain_id, name, category, author) values ($1, $2, $3, $4, $5, $6) returning *",
