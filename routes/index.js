@@ -341,17 +341,6 @@ router.post("/update_blacklist", authenticated, async (req, res, next) => {
   }
 });
 
-router.get("/create-job", authenticated, async (req, res) => {
-  const domains = await db.query("select * from domains where user_id = $1", [
-    req.user.id,
-  ]);
-  res.render("create_job", {
-    title: "Create new job",
-    user: req.user,
-    domains: domains.rows,
-  });
-});
-
 router.post("/post-job", authenticated, async (req, res, next) => {
   try {
     const { name, category, domain, author, keywords } = req.body;
@@ -433,6 +422,17 @@ router.post("/post-job", authenticated, async (req, res, next) => {
     console.log(error);
     return next();
   }
+});
+
+router.get("/create-job", authenticated, async (req, res) => {
+  const domains = await db.query("select * from domains where user_id = $1", [
+    req.user.id,
+  ]);
+  res.render("create_job", {
+    title: "Create new job",
+    user: req.user,
+    domains: domains.rows,
+  });
 });
 
 router.get("/download-keywords/:jobId", authenticated, async (req, res) => {
