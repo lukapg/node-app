@@ -412,7 +412,7 @@ router.post("/post_job", authenticated, async (req, res, next) => {
       "job id": hashId,
     };
 
-    res.send(apiBody);
+    res.send(req.user);
 
     // const brunoApiResponse = await axios.post(req.user.request_url, apiBody);
 
