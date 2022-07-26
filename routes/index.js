@@ -412,22 +412,24 @@ router.post("/post_job", authenticated, async (req, res, next) => {
       "job id": hashId,
     };
 
-    const brunoApiResponse = await axios.get(req.user.request_url, apiBody);
+    res.send(apiBody);
 
-    const jobCreated = await db.query(
-      "insert into jobs (hash_id, user_id, domain_id, name, category, author) values ($1, $2, $3, $4, $5, $6) returning *",
-      [hashId, req.user.id, domain, name, category, author]
-    );
+    // const brunoApiResponse = await axios.get(req.user.request_url, apiBody);
 
-    keywordsArray.forEach(async (el, i, arr) => {
-      arr[i] = el.replace(/[^a-zA-Z0-9-_ ]/g, "");
-      await db.query(
-        "insert into keywords (user_id, job_id, domain_id, name, status) values ($1, $2, $3, $4, $5)",
-        [req.user.id, jobCreated.rows[0].id, domain, arr[i], 0]
-      );
-    });
-    req.flash("success_message", "Job created successfully");
-    return res.redirect("/history");
+    // const jobCreated = await db.query(
+    //   "insert into jobs (hash_id, user_id, domain_id, name, category, author) values ($1, $2, $3, $4, $5, $6) returning *",
+    //   [hashId, req.user.id, domain, name, category, author]
+    // );
+
+    // keywordsArray.forEach(async (el, i, arr) => {
+    //   arr[i] = el.replace(/[^a-zA-Z0-9-_ ]/g, "");
+    //   await db.query(
+    //     "insert into keywords (user_id, job_id, domain_id, name, status) values ($1, $2, $3, $4, $5)",
+    //     [req.user.id, jobCreated.rows[0].id, domain, arr[i], 0]
+    //   );
+    // });
+    // req.flash("success_message", "Job created successfully");
+    // return res.redirect("/history");
   } catch (error) {
     req.flash("error_message", error.message);
     console.log(error);
