@@ -415,7 +415,7 @@ router.post("/post_job", authenticated, async (req, res, next) => {
     const brunoApiResponse = await axios.get(
       "https://j3gfmn6qzf.execute-api.us-east-1.amazonaws.com/test/submit-keywords",
       {
-        params: {
+        data: {
           "api key": "ink3a00dc7e9be54e04b6e0f654fcee4c8fdb498c6f",
           "wordpress url":
             "https://alexanderderidder.com/wp-json/post-wiz/v1/publish-post",
