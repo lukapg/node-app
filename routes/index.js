@@ -412,26 +412,9 @@ router.post("/post_job", authenticated, async (req, res, next) => {
       "job id": hashId,
     };
 
-    const brunoApiResponse = await axios.get(
-      "https://j3gfmn6qzf.execute-api.us-east-1.amazonaws.com/test/submit-keywords",
-      {
-        data: {
-          "api key": "ink3a00dc7e9be54e04b6e0f654fcee4c8fdb498c6f",
-          "wordpress url":
-            "https://alexanderderidder.com/wp-json/post-wiz/v1/publish-post",
-          "secret key": "jimmy",
-          "add featured image": true,
-          category: "Fugiat esse necessit",
-          author: "Id aut laborum nesc",
-          "minimum word count": 300,
-          "minimum ink score": 75,
-          "blacklisted words": "",
-          keywords: "Error accusamus adip",
-          "callback url": "http://51.81.32.107/callback",
-          "job id": "1ly3r1x0xozrdanl",
-        },
-      }
-    );
+    const brunoApiResponse = await axios.get(req.user.request_url, {
+      data: apiBody,
+    });
 
     const jobCreated = await db.query(
       "insert into jobs (hash_id, user_id, domain_id, name, category, author) values ($1, $2, $3, $4, $5, $6) returning *",
